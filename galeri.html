@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galeri Foto - Riski & Ayu</title>
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #ff6b6b;
+      --secondary: #ffd700;
+      --dark: #2d3436;
+      --light: #ffffff;
+      --gray: #f2f2f2;
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #000000, #444444, #cccccc);
+      background-attachment: fixed;
+      color: var(--light);
+      line-height: 1.6;
+    
+  padding-bottom: 100px;
+}
+    
+    /* Navbar Styling */
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 1rem;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      transition: var(--transition);
+    }
+    
+    nav.scrolled {
+      padding: 0.7rem 1rem;
+    }
+    
+    nav a {
+      color: var(--light);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+      position: relative;
+      padding: 0.5rem 0;
+    }
+    
+    nav a:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: var(--secondary);
+      transition: var(--transition);
+    }
+    
+    nav a:hover {
+      color: var(--secondary);
+    }
+    
+    nav a:hover:after {
+      width: 100%;
+    }
+    
+    /* Header */
+    .page-header {
+      height: 40vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+      margin-bottom: 3rem;
+    }
+    
+    .page-header:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('/api/placeholder/1200/800') center/cover no-repeat;
+      opacity: 0.5;
+      z-index: -1;
+      animation: slowZoom 20s infinite alternate;
+    }
+    
+    @keyframes slowZoom {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.1); }
+    }
+    
+    .header-content {
+      z-index: 1;
+      max-width: 800px;
+      padding: 2rem;
+    }
+    
+    .page-header h1 {
+      font-size: 4rem;
+      font-family: 'Dancing Script', cursive;
+      margin-bottom: 1rem;
+      color: var(--light);
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+      animation: fadeInDown 1s ease;
+    }
+    
+    .page-header .subtitle {
+      font-size: 1.3rem;
+      color: var(--light);
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+      max-width: 600px;
+      margin: 0 auto;
+      animation: fadeInUp 1s ease 0.5s forwards;
+      opacity: 0;
+    }
+    
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Main Content */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 6rem 2rem 2rem;
+    
+  padding-bottom: 150px;
+    
+    /* Filter Buttons */
+    .filter-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 2rem;
+      gap: 0.8rem;
+    }
+    
+    .filter-btn {
+      padding: 0.7rem 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: var(--light);
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: var(--transition);
+      backdrop-filter: blur(5px);
+    }
+    
+    .filter-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-3px);
+    }
+    
+    .filter-btn.active {
+      background: var(--secondary);
+      color: var(--dark);
+    }
+    
+    /* Gallery Grid */
+    .gallery-container {
+      margin-top: 3rem;
+    }
+    
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+    
+    .gallery.fade {
+      opacity: 0;
+    }
+    
+    .gallery-item {
+      position: relative;
+      border-radius: 15px;
+      overflow: hidden;
+      cursor: pointer;
+      height: 250px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      transition: var(--transition);
+      transform-origin: center;
+    }
+    
+    .gallery-item:hover {
+      transform: scale(1.03) translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+    
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+    
+    .gallery-item .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .gallery-item:hover .overlay {
+      opacity: 1;
+    }
+    
+    .gallery-item .caption {
+      color: var(--light);
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    
+    .gallery-item .date {
+      color: var(--secondary);
+      font-size: 0.8rem;
+      margin-top: 0.3rem;
+    }
+    
+    .gallery-item .icon {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 40px;
+      height: 40px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--light);
+      font-size: 1.2rem;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s ease 0.1s;
+    }
+    
+    .gallery-item:hover .icon {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  
+    /* Lightbox */
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .lightbox.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .lightbox-content {
+      position: relative;
+      max-width: 80%;
+      max-height: 80vh;
+    }
+    
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 80vh;
+      border-radius: 10px;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.8);
+    }
+    
+    .lightbox-close {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      background: none;
+      border: none;
+      color: var(--light);
+      font-size: 2rem;
+      cursor: pointer;
+    }
+    
+    .lightbox-prev,
+    .lightbox-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--light);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .lightbox-prev:hover,
+    .lightbox-next:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .lightbox-prev {
+      left: -80px;
+    }
+    
+    .lightbox-next {
+      right: -80px;
+    }
+    
+    .lightbox-caption {
+      position: absolute;
+      bottom: -40px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      color: var(--light);
+    }
+    
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      display: none;
+    }
+    
+    .empty-state i {
+      font-size: 3rem;
+      color: var(--secondary);
+      opacity: 0.7;
+      margin-bottom: 1rem;
+    }
+    
+    .empty-state p {
+      font-size: 1.2rem;
+      color: var(--light);
+      opacity: 0.8;
+    }
+    
+    /* Loading Animation */
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--secondary);
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Load More Button */
+    .load-more {
+      display: block;
+      margin: 3rem auto 0;
+      padding: 0.8rem 2.5rem;
+      background: linear-gradient(120deg, var(--primary), var(--secondary));
+      border: none;
+      color: var(--light);
+      font-weight: bold;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .load-more:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 3rem 1rem;
+      margin-top: 4rem;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+    }
+    
+    .heart {
+      color: var(--primary);
+      animation: heartbeat 1.5s infinite;
+    }
+    
+    @keyframes heartbeat {
+      0% { transform: scale(1); }
+      14% { transform: scale(1.3); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.3); }
+      70% { transform: scale(1); }
+    }
+    
+    /* Scroll to top */
+    .scroll-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 45px;
+      height: 45px;
+      background: var(--secondary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--dark);
+      text-decoration: none;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: var(--transition);
+      z-index: 900;
+    }
+    
+    .scroll-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .scroll-top:hover {
+      background: var(--light);
+      transform: translateY(-5px);
+    }
+    
+    /* Masonry Layout */
+    .gallery.masonry {
+      grid-auto-rows: 0;
+    }
+    
+    .gallery.masonry .gallery-item:nth-child(3n+1) {
+      grid-row: span 1;
+    }
+    
+    .gallery.masonry .gallery-item:nth-child(3n+2) {
+      grid-row: span 1.3;
+    }
+    
+    .gallery.masonry .gallery-item:nth-child(3n+3) {
+      grid-row: span 0.8;
+    }
+    
+    /* Responsive */
+    @media (max-width: 992px) {
+      .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      }
+      
+      .lightbox-prev {
+        left: -60px;
+      }
+      
+      .lightbox-next {
+        right: -60px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .page-header h1 {
+        font-size: 3rem;
+      }
+      
+      .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 1rem;
+      }
+      
+      .lightbox-content {
+        max-width: 90%;
+      }
+      
+      .lightbox-prev {
+        left: 10px;
+      }
+      
+      .lightbox-next {
+        right: 10px;
+      }
+    }
+    
+    @media (max-width: 576px) { 
+      .page-header {
+        height: 30vh;
+      }
+      
+      .page-header h1 {
+        font-size: 2.5rem;
+      }
+      
+      .filter-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+      }
+      
+      .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      }
+      
+      .gallery-item {
+        height: 180px;
+      }
+      
+      .gallery-item .caption {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Beranda</a>
+    <a href="galeri.html">Foto Kita</a>
+    <a href="musik.html">Musik</a>
+    <a href="acara.html">Acara Spesial</a>
+    <a href="tujuan.html">Tujuan</a>
+    <a href="sosmed.html">Sosial Media</a>
+  </nav>
+
+  <header class="page-header">
+    <div class="header-content">
+      <h1>Galeri Foto Kita</h1>
+      <p class="subtitle">Kenangan dan momen indah yang telah kita lalui bersama, terekam dalam setiap gambar</p>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="filter-container">
+      <button class="filter-btn active" data-filter="all">Semua Foto</button>
+      <button class="filter-btn" data-filter="jalan-jalan">Jalan-jalan</button>
+      <button class="filter-btn" data-filter="kencan">Kencan</button>
+      <button class="filter-btn" data-filter="anniversary">Anniversary</button>
+      <button class="filter-btn" data-filter="selfie">Selfie</button>
+    </div>
+
+    <div class="gallery-container">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Memuat galeri...</p>
+      </div>
+
+      <div class="empty-state">
+        <i class="fas fa-image"></i>
+        <p>Tidak ada foto dalam kategori ini</p>
+      </div>
+
+      <div class="gallery masonry">
+        <!-- Foto 1 -->
+        <div class="gallery-item" data-category="kencan">
+          <img src="images/foto1.jpg" alt="Kencan Pertama">
+          <div class="overlay">
+            <h3 class="caption">Kencan Pertama</h3>
+            <p class="date">14 Juni 2023</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-expand"></i>
+          </div>
+        </div>
+
+        <!-- Foto 2 -->
+        <div class="gallery-item" data-category="jalan-jalan">
+          <img src="images/foto2.jpg" alt="Trip ke Pantai">
+          <div class="overlay">
+            <h3 class="caption">Trip ke Pantai</h3>
+            <p class="date">20 Agustus 2023</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-expand"></i>
+          </div>
+        </div>
+
+        <!-- Foto 3 -->
+        <div class="gallery-item" data-category="selfie">
+          <img src="images/foto3.jpg" alt="Selfie Kita">
+          <div class="overlay">
+            <h3 class="caption">Selfie Favorit</h3>
+            <p class="date">10 September 2023</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-expand"></i>
+          </div>
+        </div>
+
+        <!-- Foto 4 -->
+        <div class="gallery-item" data-category="jalan-jalan">
+          <img src="/api/placeholder/400/450" alt="Piknik di Taman">
+          <div class="overlay">
+            <h3 class="caption">Piknik di Taman</h3>
+            <p class="date">5 Oktober 2023</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-expand"></i>
+          </div>
+        </div>
+
+        <!-- Foto 5 -->
+        <div class="gallery-item" data-category="anniversary">
+          <img src="images/foto3.jpg" alt="Anniversary 1 Bulan">
+          <div class="overlay">
+            <h3 class="caption">Anniversary 1 Bulan</h3>
+            <p class="date">5 Juni 2023</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-expand"></i>
+          </div>
+        </div>
+
+        <!-- Foto 6 -->
+        <div class="gallery-item" data-category="kencan">
+          <img src="images/foto3.jpg" alt="Dinner Romantis">
+          <div class="overlay">
+            <h3 class="caption">Dinner Romantis</h3>
+            <p class="date">18 November 2023</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-expand"></i>
+          </div>
+        </div>
+
+        <!-- Foto 7 -->
+        <div class="gallery-item" data-category="selfie">
+          <img src="images/foto3.jpg" alt="Selfie Lucu">
+          <div class="overlay">
+            <h3 class="caption">Selfie Lucu</h3>
+            <p class="date">24 Desember 2023</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-expand"></i>
+          </div>
+        </div>
+
+        <!-- Foto 8 -->
+        <div class="gallery-item" data-category="anniversary">
+          <img src="images/foto3.jpg" alt="Anniversary 6 Bulan">
+          <div class="overlay">
+            <h3 class="caption">Anniversary 6 Bulan</h3>
+            <p class="date">5 November 2023</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-expand"></i>
+          </div>
+        </div>
+
+        <!-- Foto 9 -->
+        <div class="gallery-item" data-category="jalan-jalan">
+          <img src="images/foto3.jpg" alt="Jalan-jalan ke Mall">
+          <div class="overlay">
+            <h3 class="caption">Jalan-jalan ke Mall</h3>
+            <p class="date">15 Januari 2024</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-expand"></i>
+          </div>
+        </div>
+
+        <!-- Foto 10 -->
+        <div class="gallery-item" data-category="selfie">
+          <img src="images/foto3.jpg" alt="Selfie Bareng">
+          <div class="overlay">
+            <h3 class="caption">Selfie Bareng</h3>
+            <p class="date">28 Februari 2024</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-expand"></i>
+          </div>
+        </div>
+
+        <!-- Foto 11 -->
+        <div class="gallery-item" data-category="anniversary">
+          <img src="images/foto3.jpg" alt="Anniversary 1 Tahun">
+          <div class="overlay">
+            <h3 class="caption">Anniversary 1 Tahun</h3>
+            <p class="date">5 Mei 2024</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-expand"></i>
+          </div>
+        </div>
+
+        <!-- Foto 12 -->
+        <div class="gallery-item" data-category="kencan">
+          <img src="images/foto3.jpg" alt="Makan Es Krim">
+          <div class="overlay">
+            <h3 class="caption">Makan Es Krim</h3>
+            <p class="date">10 Maret 2024</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-expand"></i>
+          </div>
+        </div>
+      </div>
+      
+      <button class="load-more">Lihat Lebih Banyak</button>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox">
+    <div class="lightbox-content">
+      <button class="lightbox-close">
+        <i class="fas fa-times"></i>
+      </button>
+      <img src="" alt="" class="lightbox-img">
+      <button class="lightbox-prev">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button class="lightbox-next">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+      <div class="lightbox-caption"></div>
+    </div>
+  </div>
+
+  <a href="#" class="scroll-top">
+    <i class="fas fa-arrow-up"></i>
+  </a>
+
+  <footer>
+    <p>© 2025 Riski & Ayu | Dibuat dengan <i class="fas fa-heart heart"></i></p>
+  </footer>
+
+  <script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', function() {
+      const nav = document.querySelector('nav');
+      const scrollTop = document.querySelector('.scroll-top');
+      
+      if (window.scrollY > 50) {
+        nav.classList.add('scrolled');
+        scrollTop.classList.add('visible');
+      } else {
+        nav.classList.remove('scrolled');
+        scrollTop.classList.remove('visible');
+      }
+    });
+    
+    // Filter Gallery
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const gallery = document.querySelector('.gallery');
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    const emptyState = document.querySelector('.empty-state');
+    const loading = document.querySelector('.loading');
+    
+    // Simulate loading
+    window.addEventListener('load', function() {
+      gallery.style.display = 'none';
+      loading.style.display = 'block';
+      
+      setTimeout(() => {
+        loading.style.display = 'none';
+        gallery.style.display = 'grid';
+      }, 800);
+    });
+    
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        // Update active button
+        filterBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Filter items
+        const filter = this.getAttribute('data-filter');
+        
+        // Show loading animation
+        gallery.classList.add('fade');
+        loading.style.display = 'block';
+        
+        setTimeout(() => {
+          if (filter === 'all') {
+            // Show all items
+            galleryItems.forEach(item => {
+              item.style.display = 'block';
+            });
+          } else {
+            // Filter items
+            let visibleCount = 0;
+            
+            galleryItems.forEach(item => {
+              if (item.getAttribute('data-category') === filter) {
+                item.style.display = 'block';
+                visibleCount++;
+              } else {
+                item.style.display = 'none';
+              }
+            });
+            
+            // Show empty state if no items
+            if (visibleCount === 0) {
+              emptyState.style.display = 'block';
+            } else {
+              emptyState.style.display = 'none';
+            }
+          }
+          
+          // Hide loading animation
+          loading.style.display = 'none';
+          gallery.classList.remove('fade');
+        }, 500);
+      });
+    });
+    
+    // Lightbox
+    const lightbox = document.querySelector('.lightbox');
+    const lightboxImg = document.querySelector('.lightbox-img');
+    const lightboxClose = document.querySelector('.lightbox-close');
+    const lightboxPrev = document.querySelector('.lightbox-prev');
+    const lightboxNext = document.querySelector('.lightbox-next');
+    const lightboxCaption = document.querySelector('.lightbox-caption');
+    
+    let currentIndex = 0;
+    
+    // Open lightbox
+    galleryItems.forEach((item, index) => {
+      item.addEventListener('click', function() {
+        currentIndex = index;
+        const img = this.querySelector('img');
+        const caption = this.querySelector('.caption').textContent;
+        const date = this.querySelector('.date').textContent;
+        
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+        lightboxCaption.innerHTML = `${caption} - <span>${date}</span>`;
+        
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+    
+    // Close lightbox
+    lightboxClose.addEventListener('click', function() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+    
+    lightbox.addEventListener('click', function(e) {
+      if (e.target === lightbox) {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+    
+    // Next image
+    lightboxNext.addEventListener('click', function() {
+      currentIndex = (currentIndex + 1) % galleryItems.length;
+      updateLightboxContent();
+    });
+    
+    // Previous image
+    lightboxPrev.addEventListener('click', function() {
+      currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
+      updateLightboxContent();
+    });
+    
+    // Update lightbox content
+    function updateLightboxContent() {
+      // Get visible items only
+      const visibleItems = Array.from(galleryItems).filter(item => {
+        return window.getComputedStyle(item).display !== 'none';
+      });
+      
+      // If no visible items, return
+      if (visibleItems.length === 0) return;
+      
+      // Find the index in visible items
+      let visibleIndex = 0;
+      for (let i = 0; i < visibleItems.length; i++) {
+        if (visibleItems[i] === galleryItems[currentIndex]) {
+          visibleIndex = i;
+          break;
+        }
+      }
+      
+      // Get the current visible item
+      const item = visibleItems[visibleIndex % visibleItems.length];
+      currentIndex = Array.from(galleryItems).indexOf(item);
+      
+      const img = item.querySelector('img');
+      const caption = item.querySelector('.caption').textContent;
+      const date = item.querySelector('.date').textContent;
+      
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightboxCaption.innerHTML = `${caption} - <span>${date}</span>`;
+    }
+    
+    // Scroll to top
+    document.querySelector('.scroll-top').addEventListener('click', function(e) {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Load more button (simulation)
+    document.querySelector('.load-more').addEventListener('click', function() {
+      this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memuat...';
+      
+      setTimeout(() => {
+        this.innerHTML = 'Lihat Lebih Banyak';
+        alert('Semua foto telah ditampilkan!');
+      }, 1500);
+    });

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Musik Kita - Riski & Ayu</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #000000, #444444, #cccccc);
+      background-attachment: fixed;
+      color: #fff;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #ffd700;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 2rem;
+    }
+    .lagu {
+      margin-bottom: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 1rem;
+      padding: 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+    audio {
+      width: 100%;
+      margin-top: 1rem;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #cccccc;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Beranda</a>
+    <a href="galeri.html">Foto Kita</a>
+    <a href="musik.html">Musik</a>
+    <a href="acara.html">Acara Spesial</a>
+    <a href="tujuan.html">Tujuan</a>
+    <a href="sosmed.html">Sosial Media</a>
+  </nav>
+
+  <div class="container">
+    <h1>Playlist Cinta Kita 🎵</h1>
+
+    <div class="lagu">
+      <h3>Perfect - Ed Sheeran</h3>
+      <audio controls>
+        <source src="perfect.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung audio.
+      </audio>
+    </div>
+
+    <div class="lagu">
+      <h3>A Thousand Years - Christina Perri</h3>
+      <audio controls>
+        <source src="athousandyears.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung audio.
+      </audio>
+    </div>
+
+    <div class="lagu">
+      <h3>Kesayangan - Jaz</h3>
+      <audio controls>
+        <source src="kesayangan.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung audio.
+      </audio>
+    </div>
+
+    <footer>
+      <p>© 2025 Riski & Ayu | Lagu-lagu kenangan kita</p>
+    </footer>
+  </div>
+</body>
+</html>
